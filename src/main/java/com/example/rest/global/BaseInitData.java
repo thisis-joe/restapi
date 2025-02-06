@@ -22,7 +22,7 @@ public class BaseInitData {
     @Bean
     public ApplicationRunner applicationRunner() {
         return args -> {
-            System.out.println("Hello, Spring Boot!");
+            self.init();
         };
     }
 
