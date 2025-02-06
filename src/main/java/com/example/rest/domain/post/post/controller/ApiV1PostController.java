@@ -24,8 +24,11 @@ import java.util.Map;
 public class ApiV1PostController {
     private final PostService postService;
     @GetMapping
-    public List<Post> getItems() { //여러 건 조회
-        return postService.getItems();
+    public List<PostDto> getItems() { //여러 건 조회
+        List<Post> posts = postService.getItems();
+        return posts.stream()
+                .map(PostDto::new)
+                .toList();
     }
     @GetMapping("{id}")
     public PostDto getItem(@PathVariable long id) { //단 건 조회
