@@ -22,10 +22,4 @@ public class PostDto {
         this.content = post.getContent();
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdDate;
-    }
-    public LocalDateTime getModifiedAt() {
-        return modifiedDate;
-    }
 }
