@@ -1,10 +1,16 @@
 package com.example.rest.domain.post.post.controller;
+
+
 import com.example.rest.domain.post.post.entity.Post;
 import com.example.rest.domain.post.post.service.PostService;
 import com.example.rest.global.dto.RsData;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -32,20 +38,24 @@ public class ApiV1PostController {
         return new RsData("200-1", "%d번 글 삭제가 완료되었습니다.".formatted(id));
     }
 
-    record ModifyReqBody(String title, String content) {}
+    record ModifyReqBody(@NotBlank @Length(min=3)String title,
+                         @NotBlank @Length(min=3)String content
+                        ) {}
 
     @PutMapping("{id}")
-    public RsData modify(@PathVariable long id, @RequestBody ModifyReqBody body) {
+    public RsData modify(@PathVariable long id, @RequestBody @Valid ModifyReqBody body) {
         Post post = postService.getItem(id).get();
         postService.modify(post, body.title(), body.title());
 
         return new RsData("200-2", "%d번 글 수정이 완료되었습니다.".formatted(id));
     }
 
-    record WriteReqBody(String title, String content) {}
+    record WriteReqBody(@NotBlank @Length(min=3)String title,
+                        @NotBlank @Length(min=3)String content
+                        ) {}
 
     @PostMapping
-    public RsData write(@RequestBody WriteReqBody body) {
+    public RsData write(@RequestBody @Valid WriteReqBody body) {
         postService.write(body.title(), body.title());
         return new RsData("200-1", "글 작성이 완료되었습니다."
         );
