@@ -13,9 +13,7 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
-
     public void write(String title, String content) {
-
         postRepository.save(
                 Post
                         .builder()
@@ -24,16 +22,16 @@ public class PostService {
                         .build()
         );
     }
-
     public List<Post> getItems() {
         return postRepository.findAll();
     }
-
     public Optional<Post> getItem(long id) {
         return postRepository.findById(id);
     }
-
     public long count() {
         return postRepository.count();
+    }
+    public void delete(Post post) {
+        postRepository.delete(post);
     }
 }
