@@ -4,7 +4,10 @@ import com.example.rest.domain.post.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
@@ -15,9 +18,15 @@ public class ApiV1PostController {
         return postService.getItems();
     }
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id) {
+    public Map<String, Object> delete(@PathVariable long id) {
         Post post = postService.getItem(id).get();
         postService.delete(post);
-        return "%d번 글 삭제가 완료되었습니다.".formatted(id);
+
+        Map<String, Object> rsData = new HashMap<>();
+
+        rsData.put("code", "200-1");
+        rsData.put("msg", "%d번 글 삭제가 완료되었습니다.".formatted(id));
+
+        return rsData;
     }
 }
