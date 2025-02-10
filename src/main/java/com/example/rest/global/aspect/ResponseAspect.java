@@ -35,7 +35,7 @@ public class ResponseAspect {
             """
     )
 
-    public Object test(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object responseAspect(ProceedingJoinPoint joinPoint) throws Throwable {
         //System.out.println("pre");
         Object controllerProceed = joinPoint.proceed(); //실제 수행 메서드
         if(controllerProceed instanceof RsData rsData) {
