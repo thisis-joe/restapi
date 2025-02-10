@@ -1,5 +1,6 @@
 package com.example.rest.global.aspect;
 import com.example.rest.global.dto.RsData;
+import jakarta.servlet.http.HttpServletResponse;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -7,6 +8,9 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class ResponseAspect {
+
+    private final HttpServletResponse response;
+
     @Around("""
             (
                 within
@@ -30,13 +34,14 @@ public class ResponseAspect {
     )
 
     public Object test(ProceedingJoinPoint joinPoint) throws Throwable {
-        System.out.println("pre");  //전처리
+        //System.out.println("pre");
         Object proceed = joinPoint.proceed(); //실제 수행 메서드
         if(proceed instanceof RsData rsData) {
             String msg = rsData.getMsg();
-            System.out.println("msg : " + msg );
+            //System.out.println("msg : " + msg );
+            response.setStatus(201);
         }
-        System.out.println("post");
+        //System.out.println("post");
         return proceed;
     }
 

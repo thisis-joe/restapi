@@ -45,7 +45,7 @@ public class ApiV1PostController {
         Post post = postService.getItem(id).get();
         postService.delete(post);
 
-        return new RsData<>("200-1", "%d번 글 삭제가 완료되었습니다.".formatted(id));
+        return new RsData<>("204-1", "%d번 글 삭제가 완료되었습니다.".formatted(id));
     }
 
     record ModifyReqBody(@NotBlank @Length(min=3)String title,
