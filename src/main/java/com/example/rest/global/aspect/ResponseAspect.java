@@ -30,9 +30,11 @@ public class ResponseAspect {
 
     public Object test(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("pre");
-        Object proceed = joinPoint.proceed();
+        //Object proceed = joinPoint.proceed();
+        joinPoint.proceed();
         System.out.println("post");
-        return proceed;
+        //return proceed;
+        return null;
     }
 
 }
