@@ -1,4 +1,5 @@
 package com.example.rest.global.aspect;
+import com.example.rest.global.dto.RsData;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,12 +30,14 @@ public class ResponseAspect {
     )
 
     public Object test(ProceedingJoinPoint joinPoint) throws Throwable {
-        System.out.println("pre");
-        //Object proceed = joinPoint.proceed();
-        joinPoint.proceed();
+        System.out.println("pre");  //전처리
+        Object proceed = joinPoint.proceed(); //실제 수행 메서드
+        if(proceed instanceof RsData rsData) {
+            String msg = rsData.getMsg();
+            System.out.println("msg : " + msg );
+        }
         System.out.println("post");
-        //return proceed;
-        return null;
+        return proceed;
     }
 
 }
