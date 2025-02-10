@@ -36,18 +36,8 @@ public class ApiV1PostController {
     }
     @GetMapping("{id}")
     public RsData<PostDto> getItem(@PathVariable long id) { //단 건 조회
-        Post post = null;
-
-        try {
-            post = postService.getItem(id).get();
-        } catch(NoSuchElementException e) {
-            return new RsData<>(
-                    "404-1",
-                    "%d번 글이 존재하지 않습니다.".formatted(id),
-                    null
-            );
-        }
-
+        Post post = postService.getItem(id).get();
+        
         return new RsData<>("200-1", "글 조회가 완료되었습니다.", new PostDto(post));
     }
     @DeleteMapping("/{id}")
