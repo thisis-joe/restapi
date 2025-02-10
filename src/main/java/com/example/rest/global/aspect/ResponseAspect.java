@@ -25,11 +25,14 @@ public class ResponseAspect {
             )
             ||
             @annotation(org.springframework.web.bind.annotation.ResponseBody)
-            """)
+            """
+    )
+
     public Object test(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("pre");
-        joinPoint.proceed();
+        Object proceed = joinPoint.proceed();
         System.out.println("post");
-        return null;
+        return proceed;
     }
+
 }
