@@ -39,11 +39,11 @@ public class ApiV1PostController {
         return new RsData<>("200-1", "글 조회가 완료되었습니다.", new PostDto(post));
     }
     @DeleteMapping("/{id}")
-    public RsData delete(@PathVariable long id) {
+    public RsData<Void> delete(@PathVariable long id) {
         Post post = postService.getItem(id).get();
         postService.delete(post);
 
-        return new RsData("200-1", "%d번 글 삭제가 완료되었습니다.".formatted(id));
+        return new RsData<>("200-1", "%d번 글 삭제가 완료되었습니다.".formatted(id));
     }
 
     record ModifyReqBody(@NotBlank @Length(min=3)String title,
@@ -51,11 +51,11 @@ public class ApiV1PostController {
                         ) {}
 
     @PutMapping("{id}")
-    public RsData modify(@PathVariable long id, @RequestBody @Valid ModifyReqBody body) {
+    public RsData<Void> modify(@PathVariable long id, @RequestBody @Valid ModifyReqBody body) {
         Post post = postService.getItem(id).get();
         postService.modify(post, body.title(), body.title());
 
-        return new RsData("200-2", "%d번 글 수정이 완료되었습니다.".formatted(id));
+        return new RsData<>("200-2", "%d번 글 수정이 완료되었습니다.".formatted(id),null);
     }
 
     record WriteReqBody(@NotBlank @Length(min=3)String title,
