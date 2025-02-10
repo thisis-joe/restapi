@@ -1,12 +1,14 @@
 package com.example.rest.global.aspect;
 import com.example.rest.global.dto.RsData;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class ResponseAspect {
 
     private final HttpServletResponse response;
@@ -39,7 +41,7 @@ public class ResponseAspect {
         if(proceed instanceof RsData rsData) {
             String msg = rsData.getMsg();
             //System.out.println("msg : " + msg );
-            response.setStatus(201);
+            response.setStatus(201); //응답 코드 설정
         }
         //System.out.println("post");
         return proceed;
