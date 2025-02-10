@@ -24,17 +24,19 @@ import java.util.Map;
 public class ApiV1PostController {
     private final PostService postService;
     @GetMapping
-    public List<PostDto> getItems() { //여러 건 조회
+    public RsData getItems() { //여러 건 조회
         List<Post> posts = postService.getItems();
-        return posts.stream()
-                .map(PostDto::new)
-                .toList();
+        List<PostDto> postDtos = posts.stream()
+                                    .map(PostDto::new)
+                                    .toList();
+        return new RsData("200-1", "글 목록 조회가 완료되었습니다.", postDtos);
     }
     @GetMapping("{id}")
-    public PostDto getItem(@PathVariable long id) { //단 건 조회
+    public RsData getItem(@PathVariable long id) { //단 건 조회
         Post post = postService.getItem(id).get();
-        PostDto postDto = new PostDto(post);
-        return postDto;
+//        PostDto postDto = new PostDto(post);
+//        return postDto;
+        return new RsData("200-1", "글 조회가 완료되었습니다.", new PostDto(post));
     }
     @DeleteMapping("/{id}")
     public RsData delete(@PathVariable long id) {
