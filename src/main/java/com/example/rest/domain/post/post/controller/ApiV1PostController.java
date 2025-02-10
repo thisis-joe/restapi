@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -65,16 +67,25 @@ public class ApiV1PostController {
     }
 
     @PostMapping
-    public RsData<WriteResBody> write(@RequestBody @Valid WriteReqBody body) {
+    public ResponseEntity<RsData<WriteResBody>> write(@RequestBody @Valid WriteReqBody body) {
         Post post = postService.write(body.title(), body.content());
-        return new RsData<>(
-                "200-1",
-                "글 작성이 완료되었습니다.",
-                new WriteResBody(
-                        post.getId(),
-                        postService.count()
-                )
-        );
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(
+                        new RsData<>(
+                    "200-1",
+                    "글 작성이 완료되었습니다.",
+                        new WriteResBody(
+                                post.getId(),
+                                postService.count()
+                           )
+                        )
+                );
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "test";
     }
 
 }
