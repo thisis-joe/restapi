@@ -37,14 +37,13 @@ public class ResponseAspect {
 
     public Object test(ProceedingJoinPoint joinPoint) throws Throwable {
         //System.out.println("pre");
-        Object proceed = joinPoint.proceed(); //실제 수행 메서드
-        if(proceed instanceof RsData rsData) {
-            String msg = rsData.getMsg();
-            //System.out.println("msg : " + msg );
-            response.setStatus(201); //응답 코드 설정
+        Object controllerProceed = joinPoint.proceed(); //실제 수행 메서드
+        if(controllerProceed instanceof RsData rsData) {
+            int statusCode = rsData.getStatusCode();
+            response.setStatus(statusCode);
         }
         //System.out.println("post");
-        return proceed;
+        return controllerProceed;
     }
 
 }
