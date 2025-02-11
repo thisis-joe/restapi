@@ -11,7 +11,10 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class) //없는 데이터 요청 시
-    public ResponseEntity<RsData<Void>> handle() {
+    public ResponseEntity<RsData<Void>> handle(NoSuchElementException e) {
+
+        e.printStackTrace();
+
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(
