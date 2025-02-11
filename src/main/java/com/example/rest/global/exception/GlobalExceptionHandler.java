@@ -19,8 +19,18 @@ public class GlobalExceptionHandler {
                         )
                 );
     }
-    @ExceptionHandler(MethodArgumentNotValidException.class) //입력값 검증 실패
-    public String handleMethodArgumentNotValidException() {
-        return "MethodArgumentNotValidException";
+    @ExceptionHandler(MethodArgumentNotValidException.class) //입력값 검증 실패 시
+    public ResponseEntity<RsData<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        String field = e.getBindingResult().getFieldError().getField();
+        String message = e.getBindingResult().getFieldError().getDefaultMessage();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(
+                        new RsData<>(
+                                "400-1",
+                                field + " : " + message
+                        )
+                );
     }
 }
