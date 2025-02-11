@@ -1,4 +1,5 @@
 package com.example.rest.global.exception;
+import com.example.rest.global.app.AppConfig;
 import com.example.rest.global.dto.RsData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class) //없는 데이터 요청 시
     public ResponseEntity<RsData<Void>> handle(NoSuchElementException e) {
 
-        e.printStackTrace();
+        //개발모드에서만 작동되도록 함.
+        if(AppConfig.isNotProd()) e.printStackTrace();
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
