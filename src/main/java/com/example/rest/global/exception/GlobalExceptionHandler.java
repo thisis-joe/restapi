@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
                 .body(
                         new RsData<>(
                                 "400-1",
-                                "이미 존재하는 데이터입니다."
+                                e.getMessage()
                         )
                 );
     }
