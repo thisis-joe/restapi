@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
                 );
     }
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<RsData<Void>> IllegalArgumentExceptionHandle(ServiceException e) {
+    public ResponseEntity<RsData<Void>> ServiceExceptionHandle(ServiceException e) {
 
         // 개발 모드에서만 작동되도록.
         if(AppConfig.isNotProd()) e.printStackTrace();

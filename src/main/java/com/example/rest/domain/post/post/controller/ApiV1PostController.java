@@ -1,6 +1,8 @@
 package com.example.rest.domain.post.post.controller;
 
 
+import com.example.rest.domain.member.member.entity.Member;
+import com.example.rest.domain.member.member.service.MemberService;
 import com.example.rest.domain.post.post.dto.PostDto;
 import com.example.rest.domain.post.post.entity.Post;
 import com.example.rest.domain.post.post.service.PostService;
@@ -25,21 +27,26 @@ import java.util.NoSuchElementException;
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class ApiV1PostController {
+
     private final PostService postService;
+    private final MemberService memberService;
+
     @GetMapping
     public RsData<List<PostDto>> getItems() { //여러 건 조회
         List<Post> posts = postService.getItems();
         List<PostDto> postDtos = posts.stream()
-                                    .map(PostDto::new)
-                                    .toList();
+                .map(PostDto::new)
+                .toList();
         return new RsData<>("200-1", "글 목록 조회가 완료되었습니다.", postDtos);
     }
+
     @GetMapping("{id}")
     public RsData<PostDto> getItem(@PathVariable long id) { //단 건 조회
         Post post = postService.getItem(id).get();
-        
+
         return new RsData<>("200-1", "글 조회가 완료되었습니다.", new PostDto(post));
     }
+
     @DeleteMapping("/{id}")
     public RsData<Void> delete(@PathVariable long id) {
         Post post = postService.getItem(id).get();
@@ -48,12 +55,13 @@ public class ApiV1PostController {
         return new RsData<>("204-1", "%d번 글 삭제가 완료되었습니다.".formatted(id));
     }
 
-    record ModifyReqBody(@NotBlank @Length(min=3)String title,
-                         @NotBlank @Length(min=3)String content
-                        ) {}
+    record ModifyReqBody(@NotBlank @Length(min = 3) String title,
+                         @NotBlank @Length(min = 3) String content
+    ) {
+    }
 
     @PutMapping("{id}")
-    public  RsData<Void> modify(@PathVariable long id, @RequestBody @Valid ModifyReqBody body) {
+    public RsData<Void> modify(@PathVariable long id, @RequestBody @Valid ModifyReqBody body) {
         Post post = postService.getItem(id).get();
         postService.modify(post, body.title(), body.title());
 
@@ -61,32 +69,27 @@ public class ApiV1PostController {
 //        return ResponseEntity
 //                .noContent()
 //                .build();
-        return new RsData<>("200-2", "%d번 글 수정이 완료되었습니다.".formatted(id),null);
+        return new RsData<>("200-2", "%d번 글 수정이 완료되었습니다.".formatted(id), null);
     }
 
-    record WriteReqBody(@NotBlank @Length(min=3)String title,
-                        @NotBlank @Length(min=3)String content
-                        ) {}
+    record WriteReqBody(@NotBlank @Length(min = 3) String title,
+                        @NotBlank @Length(min = 3) String content
+    ) {
+    }
+
     record WriteResBody(long id, long totalCount) {
     }
 
     @PostMapping
-    public RsData<WriteResBody> write(@RequestBody @Valid WriteReqBody body) {
-        Post post = postService.write(body.title(), body.content());
+    public RsData<PostDto> write(@RequestBody @Valid WriteReqBody body) {
 
-        return   new RsData<>(
+        Member actor = memberService.findByUsername("user3").get();
+        Post post = postService.write(actor, body.title(), body.content());
+
+        return new RsData<>(
                 "200-1",
                 "글 작성이 완료되었습니다.",
-                    new WriteResBody(
-                         post.getId(),
-                         postService.count()
-                    )
-                );
+                new PostDto(post)
+        );
     }
-
-    @GetMapping("/test")
-    public String test() {
-        return "test";
-    }
-
 }
