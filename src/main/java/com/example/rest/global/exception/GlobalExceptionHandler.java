@@ -44,11 +44,12 @@ public class GlobalExceptionHandler {
                         )
                 );
     }
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<RsData<Void>> DataIntegrityViolationExceptionHandle(DataIntegrityViolationException e) {
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<RsData<Void>> IllegalArgumentExceptionHandle(IllegalArgumentException e) {
 
         // 개발 모드에서만 작동되도록.
         if(AppConfig.isNotProd()) e.printStackTrace();
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(
