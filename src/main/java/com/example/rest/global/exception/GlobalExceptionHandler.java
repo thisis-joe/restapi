@@ -44,17 +44,17 @@ public class GlobalExceptionHandler {
                         )
                 );
     }
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<RsData<Void>> IllegalArgumentExceptionHandle(RuntimeException e) {
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<RsData<Void>> IllegalArgumentExceptionHandle(ServiceException e) {
 
         // 개발 모드에서만 작동되도록.
         if(AppConfig.isNotProd()) e.printStackTrace();
 
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(e.getStatusCode())
                 .body(
                         new RsData<>(
-                                "400-1",
+                                e.getCode(),
                                 e.getMessage()
                         )
                 );
