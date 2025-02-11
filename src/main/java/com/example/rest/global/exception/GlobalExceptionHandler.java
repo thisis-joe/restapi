@@ -6,6 +6,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class) //없는 데이터 요청 시
@@ -21,15 +23,18 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(MethodArgumentNotValidException.class) //입력값 검증 실패 시
     public ResponseEntity<RsData<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        String field = e.getBindingResult().getFieldError().getField();
-        String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        String message = e.getBindingResult().getFieldErrors()
+                .stream()
+                .map(fe -> fe.getField() + " : " + fe.getCode() + " : "  + fe.getDefaultMessage())
+                .sorted()
+                .collect(Collectors.joining("\n"));
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(
                         new RsData<>(
                                 "400-1",
-                                field + " : " + message
+                                message
                         )
                 );
     }
