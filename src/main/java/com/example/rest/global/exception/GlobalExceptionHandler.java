@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<RsData<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors()
                 .stream()
-                .map(fe -> fe.getField() + " : " + fe.getCode() + " : "  + fe.getDefaultMessage())
+                .map(fe -> fe.getField() + " : " + fe.getCode() +" : " + fe.getDefaultMessage())
                 .sorted()
                 .collect(Collectors.joining("\n"));
 
